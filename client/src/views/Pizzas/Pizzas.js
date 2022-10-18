@@ -1,28 +1,14 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addToCart } from '../../features/task/taskSlice';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import {connect} from "react-redux";
+import {addToCart, loadCurrentItem} from "../../redux/actions/actions";
 
-const Pizzas = () => {
-  const tasks = useSelector((state) => state.tasks);
-
-  const [addProduct, setAddProduct] = useState();
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const insertProduct = (id) => {
-    setAddProduct(dispatch(addToCart(id)));
-    navigate("/checkout");
-    console.log(addProduct);
-  }
-
+const Pizzas = ({products, addToCart}) => {
   return (
     <div className='container'>
       <h4 className='text-info mt-4 text-center'>Pizzas</h4>
       <div className='d-flex justify-content-center align-items-center'>
         <div className='row'>
-          {tasks.products.map((item) => {
+          {products.map((item) => {
             if(item.category === "Pizzas") {
               return(
                 <div className='col-md-4 mt-4' key={item.id}>
@@ -32,7 +18,7 @@ const Pizzas = () => {
                     <div className='text-info mt-1'>{item.title}</div>
                     <div className='text-white'>{item.description}</div>
                     <div className='text-warning'>$ {item.price}</div>
-                    <button className='btn btn-outline-primary mt-2' onClick={insertProduct}>Agregar</button>
+                    <button className='btn btn-outline-primary mt-2' onClick={() => addToCart(item.id)}>Agregar</button>
                   </div>
                 </div>
               )
@@ -44,4 +30,17 @@ const Pizzas = () => {
   )
 }
 
-export default Pizzas;
+const mapStateToProps = (state) => {
+  return {
+    products: state.shop.products
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (id) => dispatch(addToCart(id)),
+    loadCurrentItem: (item) => dispatch(loadCurrentItem(item))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pizzas);

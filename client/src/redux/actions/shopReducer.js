@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import * as actionTypes from "./types";
 
 const initialState = {
   products: [
@@ -92,20 +92,15 @@ const initialState = {
     }
   ],
   cart: [],
-  // amount: 2,
-  // total: 0,
-  // isLoading: true,
-  // cart: [],
   currentItem: null,
-  // count: 0,
 };
 
-export const taskSlice = createSlice({
-  name: "tasks",
-  initialState: initialState,
-  reducers: {
-    addToCart: (state, action) => {
-      const item = state.products.find((product) => product.id === action.payload.id);
+const shopReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case actionTypes.ADD_TO_CART:
+      const item = state.products.find(
+        (product) => product.id === action.payload.id
+      );
       const inCart = state.cart.find((item) =>
         item.id === action.payload.id ? true : false
       );
@@ -117,16 +112,16 @@ export const taskSlice = createSlice({
                 ? { ...item, qty: item.qty + 1 }
                 : item
             )
-          : [...state.cart, { ...item, qty: 1 }],
+          : [...state.cart, { ...item, qty: 1 }]
       };
-    },
-    removeFromCart: (state, action) => {
+
+    case actionTypes.REMOVE_FROM_CART:
       return {
         ...state,
         cart: state.cart.filter((item) => item.id !== action.payload.id),
       };
-    },
-    adjustItemQuantity: (state, action) => {
+
+    case actionTypes.ADJUST_ITEM_QUANTITY:
       return {
         ...state,
         cart: state.cart.map((item) =>
@@ -135,20 +130,15 @@ export const taskSlice = createSlice({
             : item
         ),
       };
-    },
-    loadCurrentItem: (state, action) => {
+
+    case actionTypes.LOAD_CURRENT_ITEM:
       return {
         ...state,
         currentItem: action.payload,
-      };
-    },
-  },
-});
+      }
+    default:
+      return state;
+  }
+};
 
-export const {
-  addToCart,
-  removeFromCart,
-  adjustItemQuantity,
-  loadCurrentItem,
-} = taskSlice.actions;
-export default taskSlice.reducer;
+export default shopReducer;

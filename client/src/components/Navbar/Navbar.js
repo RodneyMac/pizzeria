@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from "react-router-dom";
 import {BsCart3} from "react-icons/bs";
-import { useSelector } from 'react-redux';
+import {connect} from "react-redux";
 
-const Navbar = () => {
-  const tasks = useSelector((state) => state.tasks);
+const Navbar = ({cart}) => {
   const [cartCount, setCartCount] = useState(0);
   
   useEffect(() => {
     let count = 0;
-    tasks.cart.forEach((item) => {
+    cart.forEach((item) => {
       count += item.qty;
     });
     setCartCount(count);
-  }, [tasks.cart, cartCount]);
+  }, [cart, cartCount]);
 
   return (
     <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -26,7 +25,7 @@ const Navbar = () => {
           <div className=''>
             <Link to="/" className='btn btn-outline-primary'>Inicio</Link>
           </div>
-          <Link to="/checkout" className='d-flex align-items-center mx-5 text-decoration-none' role="button">
+          <Link to="/cart" className='d-flex align-items-center mx-5 text-decoration-none' role="button">
             <BsCart3 className="text-warning"/>
             <div className='text-info mx-2'>{cartCount}</div>
           </Link>
@@ -36,4 +35,10 @@ const Navbar = () => {
   )
 }
 
-export default Navbar;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart
+  }
+}
+
+export default connect(mapStateToProps)(Navbar);

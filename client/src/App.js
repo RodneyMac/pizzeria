@@ -7,8 +7,8 @@ import Pizzas from "./views/Pizzas/Pizzas";
 import Empanadas from "./views/Empanadas/Empanadas";
 import Bebidas from "./views/Bebidas/Bebidas";
 import Postres from "./views/Postres/Postres";
-import Checkout from "./views/Checkout/Checkout";
 import Categories from "./components/Categories/Categories";
+import Cart from "./components/Cart/Cart";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <Route path="/empanadas" element={<Empanadas/>}/>
         <Route path="/bebidas" element={<Bebidas/>}/>
         <Route path="/postres" element={<Postres/>}/>
-        <Route path="/checkout" element={<Checkout/>}/>
+        <Route path="/cart" element={<Cart/>}/>
       </Routes>
     </div>
   );
